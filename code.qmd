@@ -1,0 +1,21 @@
+---
+title: Code Examples
+subtitle: "Code snippets for spatial data processing and analysis"
+listing:
+  contents: 
+  - code/ContrastStretching/index.qmd
+  - code/MosaicRasters/index.qmd
+  - code/RasterSieving/index.qmd
+  - code/HistogramRasterBands/index.qmd
+  - code/RandomForest/index.qmd
+  - code/RandomForestAccuracy/model_accuracy.qmd
+  - code/VariableImportance/explanatory_variables.qmd
+  sort: "date desc"
+  type: default
+  categories: true
+  sort-ui: false
+  filter-ui: false
+page-layout: full
+title-block-banner: false
+title-block-banner-color: white
+---

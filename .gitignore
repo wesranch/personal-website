@@ -1,0 +1,35 @@
+#build files
+.Rproj.user/
+.Rhistory
+.RData
+.Ruserdata
+.Rproj
+.references.bib
+.styles-home.css
+.styles.css
+
+#build artifacts
+_freeze/
+_site/
+data/
+config/
+.DS_Store
+
+#logs and temp
+*.log
+*.aux
+*.out
+*.tex
+*.yml
+
+#config
+_publish.yml
+
+/.quarto/
+
+#any large files
+*.pdf
+*.png
+*.jpg
+*.tiff
+*.tif

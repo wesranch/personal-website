@@ -1,0 +1,431 @@
+---
+title: Lab two instructions
+author: 'Wesley Rancher'
+date: 2024-1-5
+date-modified: last-modified
+categories: [R, image-enhancement]
+title-block-banner: false
+title-block-banner-color: white
+editor_options: 
+  chunk_output_type: console
+---
+
+### **Summary**
+
+-   The objective of this lab is to enhance satellite imagery using a few different techniques. This lab assumes no prior coding experience and is commented thoroughly to explain what each line is doing. After setting things up it should run fairly smoothly but please ask if you need help!! I'm not trying to throw you to the wolves but learning R (among other tools), is an extremely useful skill in GIScience.
+
+-   This code script is available in the R drive as "enhance.qmd". Copy it to your folder.
+
+-   As for data, you have been provided images in the class R drive. Copy them to your project folder where you prefer to store data.
+
+-   We will be working with Landsat 8/9 (Level 1 and 2) and Sentinel 2A imagery from 2019-2024. You should look up these satellites and sensors to clarify what the levels indicate and what information or bands might be present in the images.
+
+-   In brief, you will start by getting acquianted with R and RStudio and figuring out how to read in data. You will then move to displaying your data and exploring summary statistics. This will give you a lay of the land, and then you can go on to enhancement techniques. These instructions will outline how to do this for a subset of the data (you will just need to replicate the steps for ALL of your data). The last step of this lab is to compare across datasets and across time and infer based on what you create (quantitatively and qualitatively).
+
+### **Setting up R**
+
+-   To run a line of code move your cursor to the line and press ctrl+Enter. To run a chunk of code press the green button at the top right of the chunk. If a a line starts with a #, it is a comment but it can also be used to prevent a line from running. See how I comment out install packages on line 31 since I have already installed this package on my computer.
+
+Install terra and other packages. Terra is the main library that will let us work with spatial data
+
+```{r, echo=TRUE, eval=FALSE}
+#install.packages("terra")
+#install.packages("RStoolbox")
+#install.packages("ggplot2")
+#install.packages("dplyr")
+#install.packages("ggspatial")
+#install.packages("tmap")
+
+library(terra)
+library(RStoolbox)
+library(ggplot2)
+library(dplyr)
+library(ggspatial)
+library(tmap)
+```
+
+Let's figure out where we are and get where we need to be
+
+```{r, echo=TRUE, eval=FALSE}
+#this prints the working directory
+getwd()
+
+#this sets the working directory
+#setwd("/Users/wancher/Documents/rs_485/input_data/")
+#setwd("D:/RemoteSensingLabs/input_data/")
+```
+
+### **Reading in data**
+
+Read in a single image
+
+```{r, echo=TRUE, eval=FALSE}
+# the arrow is the same as =
+# replace with your file name
+dir <- "/Users/wancher/Documents/rs_485/input_data/"
+r <- rast(paste0(dir,"landsat_panchro_2023.tif"))
+r
+```
+
+This is how you can plot something
+
+```{r, echo=TRUE, eval=FALSE}
+plot(r)
+```
+
+Print summary statistics and plot a histogram
+
+```{r, echo=TRUE, eval=FALSE}
+summary(r)
+hist(r)
+```
+
+Those are the basics of how to read an inspect an image. You can read in your other files the same way. Something like this...
+
+```{r, echo=TRUE, eval=FALSE}
+#sentinel_b2 <- "landsat8_2024_rawbands.tif"
+#sentinel_b3 <- "sentinel_2019_rawbands.tif"
+```
+
+OR
+
+We can read in all of the tiff files from our current working folder and store them in a list
+
+```{r, echo=TRUE, eval=FALSE}
+dir <- "/Users/wancher/Documents/rs_485/input_data"
+list_of_files <- list.files(dir, pattern="*.tif", full.names = TRUE)
+list_of_files
+```
+
+This is just a list of the file paths. So let's convert it to list of rasters or SpatRasters as terra puts it
+
+```{r, echo=TRUE, eval=FALSE}
+#lapply means list apply. So perform terra's rast function on a list of items
+list_of_rasters <- lapply(list_of_files, rast)
+
+#sometimes the names don't transfer properly so you can change them if needed
+names(list_of_rasters) <- list_of_files
+```
+
+### **For loops**
+
+We can write a for loop to do things in iteration. Let's say we want to plot each image in our list of rasters.
+
+```{r, echo=TRUE, eval=FALSE}
+#for each each raster in the sequence, do x thing...
+for (i in seq_along(list_of_rasters)){
+	one_image <- list_of_rasters[[i]]
+	
+	#store the name of the image
+	filename <- basename(sources(one_image))
+	plot(one_image, main = paste0(filename))
+	rm(one_image)
+}
+#this might take a second
+```
+
+### **Displaying data iteratively**
+
+Now... let's plot in true color using the plotrgb function
+
+```{r, echo=TRUE, eval=FALSE}
+#just one image and band
+plot(list_of_rasters[[1]]) #here I am just reaching into the list of rasters and grabbing the 2nd item and Band 3
+names(list_of_rasters[[1]])
+
+#just one image in true color
+plotRGB(list_of_rasters[[7]], r=4, g=3, b=2, stretch = "lin")
+```
+
+Let's do the same thing using a for loop over the entire list of rasters. You can decide if you want to use something like a for loop for the later enhancement techniques or if you would prefer to write things out line by line.
+
+```{r PLOT TRUE COLOR, echo=TRUE, eval=FALSE}
+#iterate 
+for (raster in list_of_rasters){
+  #if there is more than one band in the raster then...
+  if (nlyr(raster) > 1){
+	  filename <- varnames(raster)
+	  
+	  plotRGB(raster, r=7, g=2, b=4, 
+	          stretch = "lin",
+	          smooth = TRUE,
+	          main = paste0("true color: ", filename))
+	  
+	  #otherwise if the image only has one band
+  } else {
+    filename2 <- varnames(raster)
+    plot(raster, main = paste0("b8: ", filename2), stretch = "lin")
+  }
+}
+```
+
+**SECTION TURN IN**
+
+Question 1: What bands are needed to make a true color image for Landsat 8 and 9?
+
+Question 2: Did the Sentinel images plot in true color? What bands are needed for true color with Sentinel 2A?
+
+Question 3: Is the "plotRGB" function in the above chunk the same as the Build Virtual Raster tool in QGIS? yes/no/why?
+
+Question 4: What are different types of stretch methods within the PlotRGB function?
+
+Screenshots: Answers to questions above alongside 3 screenshots. Select one year between 2019 and 2024 and submit a screenshot of the corresponding images in that year. (Should be a landsat true color, sentinel true color, and landsat panchromatic). If your images did not display in true color, you should tweak the arguments in the plotRGB function!
+
+### **Pansharpening**
+
+```{r PANSHARPEN, echo=TRUE, eval=FALSE}
+#print the spatial resolution
+res(list_of_rasters[[1]])
+res(list_of_rasters[[7]])
+res(list_of_rasters[[14]])
+
+#you'll notice that there is a difference in spatial resolution between the landsat raw bands, landsat panchromatic, and sentinel. Since the goal here is to compare across Landsat and Sentinel we will downsample our landsat rawbands to the higher resolution of the panchromatic band (from 30m down to 15m).
+
+#as an example
+panchro_test <- list_of_rasters[[1]]
+landsat_rawbands_test <- list_of_rasters[[7]]
+
+#be sure to specify the correct bands
+landsat_rawbands_sharpened <- panSharpen(landsat_rawbands_test, panchro_test, 
+                                          r = 5, g = 4, b = 3, method = "brovey")
+```
+
+**SECTION TURN IN**
+
+Question 1: What do you think of the result? What happens if you change the method?
+
+Question 2: What is the spatial resolution of the panchromatic data compared to the raw bands of Landsat? What about the spatial resolution of Sentinel?
+
+Question 3: What units of resolution are your images in?
+
+Question 4: Answers to questions and pansharpen one of your Landsat images and submit a screenshot of the result, with a figure caption. I'll let you decide if you would like to pansharpen all of your Landsat images.
+
+### **Constrast stretching**
+
+-   Just as you would photoshop a photo you to enhance the quality or color for sharing on social media or with friends and family, we can do the same thing in remote sensing.
+
+-   Since we know that images are just numbers, we can think of this process as stretching the image values towards the extremes of the data range.
+
+Rename the bands so operations only need cast once.
+
+```{r RENAME, echo=TRUE, eval=FALSE}
+#rename the bands so we can write a universal equation
+band_names_landsat <- c("aerosol", "blue", "green", "red", "nir", "swir1", "swir2")
+band_names_sentinel <- c("blue", "green", "red", "rededge1", "rededge2", "rededge3", "nir", "rededge4", "swir1", "swir2")
+
+rename_bands <- function(raster) {
+  if ("SR_B1" %in% names(raster)) {
+    names(raster) <- band_names_landsat
+    return(raster)
+  } else if ("B2" %in% names(raster)) {
+    names(raster) <- band_names_sentinel
+    return(raster)
+  } else {
+    return(NULL)
+  }
+}
+
+list_of_rasters_renamed <- lapply(list_of_rasters, rename_bands)
+list_of_rasters_renamed <- list_of_rasters_renamed[-c(1:6)]#rm the panchro images
+```
+
+Stretch one image
+
+```{r, echo=TRUE, eval=FALSE}
+test_image <- list_of_rasters_renamed[[12]]
+hist(test_image$red)#red for example
+plot(test_image$red)
+
+#the 5th and 80th percentiles of the raster (values which 5% and 80% of the raster fall under)
+p_low <- quantile(values(test_image$red), 0.05, na.rm = TRUE)
+p_high <- quantile(values(test_image$red), 0.80, na.rm = TRUE) 
+
+#limit the range of the raster to these high and low values and change the scale to range from 0 to 1
+r_stretched <- clamp((test_image$red - p_low) / (p_high - p_low), lower = 0, upper = 1)
+plot(r_stretched$red)
+hist(r_stretched$red)
+```
+
+**SECTION TURN IN**
+
+Questions: What are your thoughts about the contrast stretch result? Did you try changing the percentile values?
+
+Contrast stretch each band in each image
+
+```{r CONTRAST STRETCH, echo=TRUE, eval=FALSE}
+contrast_stretch <- function(raster_band){
+  p_low <- quantile(values(raster_band), 0.05, na.rm = TRUE)
+  p_high <- quantile(values(raster_band), 0.90, na.rm = TRUE) 
+  stretched_band <- clamp((raster_band - p_low) / (p_high - p_low), 
+                          lower = 0, upper = 1)
+  return(stretched_band)
+}
+
+#function to apply the stretch to each band and each raster
+apply_stretch <- function(raster) {
+  band_names <- names(raster)
+  
+  #apply stretch to each band
+  stretched_bands <- lapply(band_names, function(band_name) {
+    band <- raster[[band_name]]
+    contrast_stretch(band)
+  })
+  #combine stretched bands into one raster
+  stretched_raster <- c(stretched_bands)
+  names(stretched_raster) <- band_names#retain bandnames
+  return(stretched_raster)
+}
+
+list_of_stretched_rasters <- lapply(list_of_rasters_renamed, apply_stretch)
+```
+
+### **Calculating vegetation indices**
+
+-   You can now calculate vegetation or other indices on your stretched images.
+
+-   Say you would like to look at vegetation health around Mount St Helens. You can look up things in google like "how do I compute NDVI for Landsat?" (assuming you have heard about NDVI), or "what is a good index to use when monitoring vegetation with Landsat?" What you will find is that remote sensing scientists have developed equations for answering these types of questions and it is pretty straightforward to apply if you have your data and software ready.
+
+-   In R, we can using simple arithmetic operations to do this. For example, to compute the Normalized Differenced Vegetation Index (NDVI), the equation is like so:
+
+***NDVI = NIR-RED/NIR+RED***
+
+Let's grab an image and try it:
+
+```{r, echo=TRUE, eval=FALSE}
+#dollar sign indexing is what this is called 
+#i like to follow good ole PEMDAS pretty closely when I do band math just to be cautious
+test_ndvi <- (r_stretched$B8- r_stretched$B4) / 
+             (r_stretched$B8 + r_stretched$B4)
+summary(test_ndvi)
+
+hist(test_ndvi)
+plot(test_ndvi)
+```
+
+Visualizing a different way
+
+```{r, echo=TRUE, eval=FALSE}
+#different color palette
+ndvi_palette <- colorRampPalette(c("#FFFF00", "#FF0000", "#FF00FF", "#0000FF", "#639200"))(100)
+
+#plot
+plot(test_ndvi, col = ndvi_palette, main = "ndvi sentinel")
+
+#compare this with true color
+plotRGB(r_stretched, r=3, g=2, b=1, stretch = "lin")
+
+#save and take it to qgis
+#writeRaster(test_ndvi, "/Users/wancher/Documents/rs_485/output_data/ndvi_sentinel_2022.tif")
+```
+
+**SECTION TURN IN**
+
+Screenshots: Take a screenshot of the test NDVI you produced in the default color palette, and then define your own color palette (line 317) and submit another screenshot. Mention how this either helped or did not help your interpretation of the data.
+
+Let's write a function to compute ndvi for each image and then apply it to the list of rasters.
+
+```{r EQUATIONS, echo=TRUE, eval=FALSE}
+#write functions to calculate ndvi
+calculate_ndvi <- function(raster){
+  ndvi <- (raster$nir - raster$red) / (raster$nir + raster$red)
+  names(ndvi) <- "ndvi"
+  return(ndvi)
+}
+list_of_ndvis <- lapply(list_of_stretched_rasters, calculate_ndvi)
+```
+
+### **Comparison**
+
+-   You are now going to create graphs to show your indices through time.
+
+Here is an example:
+
+```{r SUMMARIZE, echo=TRUE, eval=FALSE}
+#example of how to convert a raster to a dataframe
+df <- as.data.frame(r) #not going to use it but this is the basic function you need (line 349)
+
+#function to convert rasters to dataframes
+raster_to_dataframe <- function(raster){
+  source <- strsplit(varnames(raster), "_")[[1]][1] #split the filename by recognizing the underscore seperator and grab the first element
+  year <- strsplit(varnames(raster), "_")[[1]][3]#third element (which is year if you look at the filename)
+  
+  #average and variance
+  df <- as.data.frame(raster, xy = TRUE) %>%
+    summarise(Avg_NDVI = mean(ndvi, na.rm = TRUE),
+              SD_NDVI = sd(ndvi, na.rm = TRUE))
+    
+  df$source <- source #add source column
+  df$year <- as.numeric(year) #add year column
+  
+  return(df)
+}
+
+#convert the list of NDVIs to a list of dataframes so we can graph
+list_of_dfs <- lapply(list_of_ndvis, raster_to_dataframe)
+combined_df <- do.call(rbind, list_of_dfs) #rowbind the dataframes into one dataframe
+
+#if you would like to work in excel!
+#write.csv(combined_df, /path/to/output/folder/*.csv, row.names = FALSE)
+```
+
+Plot
+
+```{r, echo=TRUE, eval=FALSE}
+#plotting through time using ggplot library
+ggplot(combined_df, aes(x = year, y = Avg_NDVI, color = source)) +
+  geom_smooth(size = 2) + 
+  geom_point(size = 3) + #add points
+  #geom_errorbar(aes(ymin = Avg_NDVI - SD_NDVI, ymax = Avg_NDVI + SD_NDVI), width = 0.2) + 
+  labs(title = "Normalized Difference Vegetation Index in AOI",
+       x = "Year",
+       y = "Average NDVI",
+       color = "Satellite") +
+  theme_minimal()
+```
+
+**SECTION TURN IN**
+
+Questions: Your average NDVI value is an average of what exactly? What would you need to do if you wanted the average NDVI value in a particular spot in your image?
+
+Screenshots: Screenshot or figure with caption showing NDVI through time. Calculate at least 2 additional indices and make similar plots.
+
+### **Difference maps**
+
+-   For your last step you need to calculate take the difference between 2024 and 2019 for each index and satellite.
+
+For example: ***NDVI_Landsat_2024.tif - NDVI_Landsat_2019.tif***
+
+Here is how I would do it for the NDVI Image. Feel free to use the writeRaster function to export your ndvi images and make a layout in ArcGIS or QGIS if you would be more comfortable there. The ggplot layout is acceptable though!
+
+```{r, echo=TRUE, eval=FALSE}
+ndvi_diff <- list_of_ndvis[[12]] - list_of_ndvis[[7]]
+
+#using tmap
+ndvi_palette <- c("#a50026", "#d73027", "#f46d43", "#fdae61", 
+                  "#66bd63", "#006837")
+tm_shape(ndvi_diff) +
+  tm_raster(midpoint = NA, style = "pretty", palette = ndvi_palette, title = "Range") +
+  tm_layout(title = "Sentinel NDVI Difference (2024 - 2019)",
+            legend.position = c("right", "bottom"),
+            legend.bg.color = "white",  #legend background
+            legend.frame = TRUE,  #legend border
+            legend.text.size = 1.2, 
+            legend.title.size = 1.4) +
+  tm_compass(size = 2, position = c("right", "top")) +  #north arrow
+  tm_scale_bar(text.size = 1, position = c("left", "bottom"))  #scale bar
+
+```
+
+**SECTION TURN IN**
+
+Screenshots: Maps of index change between 2019 and 2024 for each index. Include a north arrow and scale bar. Use intuitive color palettes. Describe what we are looking at. As always toggle it on and off with true color images to guide your interpretation.
+
+**FINAL SUBMISSION:**
+
+Please submit...
+
+1)  A PDF write up answering the questions throughout with your screenshots attached
+
+#OR
+
+2)  You can submit this .QMD document ***rendered*** (see top of the script), with "eval=TRUE". This will convert the document to an HTML and will run your code. If you select this method you can just type your responses directly beneath the questions. Please submit both the HTML and QMD if you go with this option. You may get an error which is sort of difficult to debug. So I would suggest writing up a PDF to be safe but know that this option exists.

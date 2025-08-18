@@ -1,0 +1,6 @@
+publish:
+  github:
+    # Set the repository name
+    repository: wesranch/personal-website
+    branch: main  # This should be your deployment branch
+    dir: _site/  

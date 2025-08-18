@@ -1,0 +1,33 @@
+---
+title: Contrast stretching
+author: 'Wesley Rancher'
+date: 2024-12-19
+date-modified: last-modified
+categories: [R, Landsat, enhancement]
+title-block-banner: false
+title-block-banner-color: white
+---
+
+Let's read in a raster and set a color palette to visualize by. This example file is a modified normalized difference water index image within interior Alaska.
+
+```{r, eval = FALSE}
+library(terra)
+```
+
+```{r}
+colors <- colorRampPalette(c("white", "lightblue", 
+                             "blue", "darkblue", "black"))(100)
+r <- rast("../Reduced_Composite_Dalton.tif", lyr = 11)
+plot(r, col = colors)
+```
+
+Looks great. Now if we want to increase the contrast between different pixel values. We can do this
+
+```{r}
+# contrast stretch
+p_low <- quantile(values(r), 0.05, na.rm = TRUE)
+p_high <- quantile(values(r), 0.95, na.rm = TRUE) 
+
+r_stretched <- clamp((r - p_low) / (p_high - p_low), lower = 0, upper = 1)
+plot(r_stretched, col = colors)
+```

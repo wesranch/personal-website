@@ -1,0 +1,76 @@
+---
+title: Graphing raster distribution
+author: 'Wesley Rancher'
+date: 2024-12-19
+date-modified: last-modified
+categories: [R, Landsat, ggplot]
+title-block-banner: false
+title-block-banner-color: white
+---
+
+Histograms are the best way to get a glimpse of data, no? This code is useful if you have a multiband raster stack and want to plot the data distribution on a normalized scale. My output from this got a lot of thumbs ups at AGU this year.
+
+```{r, eval = FALSE}
+library(terra)
+library(tidyverse)
+library(ggridges)
+library(dplyr)
+library(RColorBrewer)
+
+# path to your multiband raster
+path <- "../tiffs/Reduced_Composite_Dalton.tif"
+```
+
+```{r}
+#example file
+r <- rast(path)
+band_names <- names(r)
+normalize_layer <- function(layer) {
+  min_val <- min(layer[], na.rm = TRUE)
+  max_val <- max(layer[], na.rm = TRUE)
+  normalized <- (layer - min_val) / (max_val - min_val)
+  return(normalized)
+}
+
+normalized_rasters <- lapply(1:nlyr(r), function(i) {
+  band <- r[[i]]
+  normalized_band <- normalize_layer(band)
+  return(normalized_band)
+})
+
+# stack the normalized rasters
+normalized_r <- rast(normalized_rasters)
+```
+
+Convert raster to df and plot it:
+
+```{r}
+#convert to df
+df <- as.data.frame(normalized_r, xy = FALSE, na.rm = TRUE)
+df_long <- df %>%
+  pivot_longer(cols = everything(), 
+               names_to = "Band", 
+               values_to = "Value")
+df_long_sampled <- df_long %>%
+  sample_n(500)
+
+#ridge plot
+#display.brewer.all()
+colors <- colorRampPalette(brewer.pal(11, "Paired"))(57)  # 57 colors
+
+plt <- ggplot(df_long_sampled, aes(x = Value, y = Band, fill = Band)) +
+  geom_density_ridges_gradient(scale = 10, rel_min_height = 0.002, linewidth = 0.35) +
+  scale_fill_manual(values = colors)+
+  #scale_fill_viridis_d(option = "plasma") +  
+  theme(
+    axis.title = element_blank(),  
+    axis.text.x = element_blank(),
+    axis.text.y = element_text(size = 12, color = "black", face = "bold"),
+    axis.ticks = element_blank()   
+  )
+#plt
+```
+
+Any band denoted with \_1 is derived from a spring composite, \_2, a summer composite, and \_3, a fall composite. Hence, the color grouping in the plot. For context, these are layers that are used as inputs into a random forest model prior to remove correlated variables.
+
+![](images/Histogram_RS_Inputs_2015.png)
