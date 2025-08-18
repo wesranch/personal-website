@@ -1,0 +1,23 @@
+---
+title: Lab exercises
+subtitle: "Remote Sensing lab instruction"
+listing:
+  contents: 
+  - instructions/Lab1/index.qmd
+  - instructions/Lab2/index.qmd
+  - instructions/Lab3/index.qmd
+  - instructions/Lab4/index.qmd
+  - instructions/Lab4.2/index.qmd
+  sort: "date desc"
+  type: default
+  categories: true
+  sort-ui: false
+  filter-ui: false
+page-layout: full
+title-block-banner: false
+title-block-banner-color: white
+---
+
+We will work through various standard remote sensing techniques in these labs. However, we will be focusing on one area of interest: Mount St Helens. This will enable us to tell a story using remote sensing methods while fine tuning our skills.
+
+Labs might be updated up until their open date! Feel free to add to this collaborative Spotify [playlist](https://open.spotify.com/playlist/6HDKT8XczetJ1liAdhLYXD?si=d995a7f86ac848b0&pt=1de65f5671589f0fcb4f375e36924022) so we have some tunes while we work.

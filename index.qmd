@@ -1,0 +1,41 @@
+---
+title: "Wesley Rancher"
+subtitle: "Environmental Data Scientist"
+summary: ""
+about:
+  template: trestles
+  image: IMG_9977.JPG
+  links:
+    - icon: github
+      text: Github
+      href: https://github.com/wesranch
+    - icon: google
+      text: Google Scholar
+      href: https://scholar.google.com/citations?user=Hv6tED0AAAAJ&hl=en&oi=ao
+
+format:
+  html:
+    theme: united
+    css: styles-home.css
+    toc: false
+---
+
+# Hi there, I’m Wesley!
+
+I'm a graduate researcher at the University of Oregon, where I use GIS, remote sensing, and data science to investigate landscape change across different spatial and temporal scales, with a focus on boreal and temperate ecosystems. I recently completed a Master's degree in Geography, and my thesis investigated 25 years of forest composition change in Alaska using satellite imagery, machine learning, and simulation modeling.
+
+## On this site, you’ll find:
+
+-   Code snippets for spatial data analysis using R
+-   Lab materials I’ve developed to support remote sensing and GIS instruction
+-   Maps, posters, and links to research articles
+
+------------------------------------------------------------------------
+
+## Education
+
+**M.S. in Geography**\
+University of Oregon \| Eugene, OR
+
+**B.A. in Environmental Studies, Geography, and Philosophy**\
+Ohio Wesleyan University \| Delaware, OH

@@ -1,0 +1,102 @@
+---
+title: Portfolio
+page-layout: full
+format: html
+title-block-banner: false
+title-block-banner-color: white
+---
+
+<!-- Styles -->
+
+```{=html}
+<style>
+.pdf-gallery {
+  display: flex;
+  gap: 1rem;
+  overflow-x: auto;
+  padding: 2rem;
+  scroll-behavior: smooth;
+  scroll-snap-type: x mandatory;
+}
+.pdf-card {
+  flex: 0 0 200px;
+  scroll-snap-align: center;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  cursor: pointer;
+  position: relative;
+}
+.pdf-card img {
+  width: 100%;
+  border-radius: 12px;
+  display: block;
+}
+.pdf-card.active {
+  transform: scale(1.2);
+  z-index: 10;
+  box-shadow: 0 12px 24px rgba(0,0,0,0.2);
+}
+.pdf-title {
+  font-weight: 600;
+  margin-top: 6px;
+  text-align: center;
+}
+.pdf-meta {
+  font-size: 0.8rem;
+  color: #666;
+  text-align: center;
+}
+</style>
+
+<div class="pdf-gallery" id="gallery">
+  <div class="pdf-card"><a href="portfolio/RancherFinalMap_RGB_ForScreen.pdf" target="_blank"><img src="portfolio/RancherFinalMap_RGB_ForScreen_thumb.jpg"><div class="pdf-title">Advanced Cartography Project</div><div class="pdf-meta">PDF</div></a></div>
+  
+  <div class="pdf-card"><a href="portfolio/TamariskDist_map.pdf" target="_blank"><img src="portfolio/TamariskDist_map_thumb.jpg"><div class="pdf-title">Invasive Species Map</div><div class="pdf-meta">PDF</div></a></div>
+  
+  <div class="pdf-card"><a href="portfolio/AGU_poster.pdf" target="_blank"><img src="portfolio/AGU_poster_thumb.jpg"><div class="pdf-title">AGU Poster</div><div class="pdf-meta">PDF</div></a></div>
+    
+  <div class="pdf-card"><a href="portfolio/wr_reburns_v7.pdf" target="_blank"><img src="portfolio/wr_reburns_v7_thumb.jpg"><div class="pdf-title">LANDIS-II Output Maps</div><div class="pdf-meta">PDF</div></a></div>
+  
+  <div class="pdf-card"><a href="portfolio/GraphicalAbstract-Albedo-v2.png" target="_blank"><img src="portfolio/GraphicalAbstract-Albedo-v2.png"><div class="pdf-title">Graphical Abstract of Albedo Vegetation Feedbacks</div><div class="pdf-meta">PDF</div></a></div>
+  
+  <div class="pdf-card"><a href="portfolio/lab2layout_RancherV2.pdf" target="_blank"><img src="portfolio/lab2layout_RancherV2_thumb.jpg"><div class="pdf-title">Advanced Cartography Submission</div><div class="pdf-meta">PDF</div></a></div>
+    
+  <div class="pdf-card"><a href="portfolio/Rancher_Lab3Layout.pdf" target="_blank"><img src="portfolio/Rancher_Lab3Layout_thumb.jpg"><div class="pdf-title">Advanced Cartography Submission</div><div class="pdf-meta">PDF</div></a></div>
+      
+</div>
+
+<script>
+const gallery = document.getElementById('gallery');
+const cards = Array.from(gallery.querySelectorAll('.pdf-card'));
+
+// On scroll, find the card closest to the center
+function updateActiveCard() {
+  const galleryRect = gallery.getBoundingClientRect();
+  const centerX = galleryRect.left + galleryRect.width / 2;
+  let closest = null;
+  let minDist = Infinity;
+  cards.forEach(card => {
+    const rect = card.getBoundingClientRect();
+    const cardCenter = rect.left + rect.width / 2;
+    const dist = Math.abs(centerX - cardCenter);
+    if(dist < minDist) {
+      minDist = dist;
+      closest = card;
+    }
+    card.classList.remove('active');
+  });
+  if(closest) closest.classList.add('active');
+}
+
+// Initial call and attach scroll listener
+updateActiveCard();
+gallery.addEventListener('scroll', () => {
+  requestAnimationFrame(updateActiveCard);
+});
+
+// Optional: mouse wheel scroll horizontally
+gallery.addEventListener('wheel', e => {
+  e.preventDefault();
+  gallery.scrollBy({ left: e.deltaY, behavior: 'smooth' });
+});
+</script>
+```

@@ -1,0 +1,26 @@
+project:
+  type: website
+
+website:
+  title: "Wesley Rancher"
+  navbar:
+    right:
+      - text: "home"
+        file: index.qmd
+      - text: "code"
+        file: code.qmd
+      - text: "teaching"
+        file: teaching.qmd
+      - text: "portfolio"
+        file: portfolio.qmd
+      - text: "cv"
+        file: cv.pdf
+      
+format:
+  html:
+    theme: united
+    css: styles.css
+    toc: false
+
+editor: visual
+

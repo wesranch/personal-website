@@ -1,0 +1,24 @@
+[
+  {
+    "listing": "/code.html",
+    "items": [
+      "/code/RandomForestAccuracy/model_accuracy.html",
+      "/code/VariableImportance/explanatory_variables.html",
+      "/code/RandomForest/index.html",
+      "/code/MosaicRasters/index.html",
+      "/code/ContrastStretching/index.html",
+      "/code/RasterSieving/index.html",
+      "/code/HistogramRasterBands/index.html"
+    ]
+  },
+  {
+    "listing": "/teaching.html",
+    "items": [
+      "/instructions/Lab1/index.html",
+      "/instructions/Lab3/index.html",
+      "/instructions/Lab4/index.html",
+      "/instructions/Lab4.2/index.html",
+      "/instructions/Lab2/index.html"
+    ]
+  }
+]
