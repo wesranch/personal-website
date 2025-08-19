@@ -5,14 +5,8 @@
 .Ruserdata
 .Rproj
 .references.bib
-.styles-home.css
-.styles.css
 
 #build artifacts
-_freeze/
-_site/
-data/
-config/
 .DS_Store
 
 #logs and temp
@@ -20,16 +14,17 @@ config/
 *.aux
 *.out
 *.tex
-*.yml
 
 #config
-_publish.yml
-
 /.quarto/
 
-#any large files
-*.pdf
-*.png
-*.jpg
-*.tiff
-*.tif
+#large map file
+portfolio/RancherFinalMap_RGB_ForScreen.pdf
+_site/portfolio/RancherFinalMap_RGB_ForScreen.pdf
+
+# Allow all other images and PDFs
+!*.jpg
+!*.JPG
+!*.jpeg
+!*.png
+!*.pdf

@@ -2,5 +2,5 @@ publish:
   github:
     # Set the repository name
     repository: wesranch/personal-website
-    branch: main  # This should be your deployment branch
+    branch: gh-pages
     dir: _site/  
