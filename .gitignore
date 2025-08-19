@@ -26,6 +26,7 @@ _site/portfolio/RancherFinalMap_RGB_ForScreen.pdf
 
 # Allow all other images and PDFs
 !*.jpg
+!*.JPG
 !*.jpeg
 !*.png
 !*.pdf
