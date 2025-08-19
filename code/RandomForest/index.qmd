@@ -1,0 +1,167 @@
+---
+title: "Fitting Random Forests"
+author: "Wesley Rancher"
+date: "2025-07-01"
+date-modified: last-modified
+categories: [tidymodels, randomForest, tidyverse]
+title-block-banner: false
+title-block-banner-color: white
+---
+
+Libraries
+
+```{r, eval = FALSE}
+library(dplyr)
+library(tidyverse)
+library(stringr)
+library(purrr)
+library(tidymodels)
+library(randomForest)
+library(rlang)
+library(missForest)
+```
+
+Clean training data
+
+```{r, eval = FALSE}
+#annual csvs
+files <- list.files("data/processed/csv/", pattern = "pixel-vals-fire", full.names = TRUE)
+
+clean_df <- function(file){
+  #read in
+  df <- read.csv(file)
+
+  #convert geo column to lat/lon
+  matches <- regmatches(df$.geo, regexec('"coordinates":\\[([-0-9.]+),([-0-9.]+)\\]', df$.geo))
+  coords <- do.call(rbind, matches)
+  
+  #add lat long and convert time since fire to categorical
+  df_clean <- df %>% 
+    mutate(lon = as.numeric(coords[, 2]),
+           lat = as.numeric(coords[, 3]),
+           tsf_0_5 = tsf >=0 & tsf < 5,
+           tsf_5_10 = tsf >=5 & tsf < 10,
+           tsf_10_15 = tsf >=10 & tsf < 15,
+           tsf_15_20 = tsf >=15 & tsf < 20)%>%
+    select(-.geo, -system.index, -PSP, -Year, -tsf, 
+           -all_of(starts_with("severity")), -SPP_count, -total_fires)
+  
+  if (ncol(df_clean)==38){
+    return(df_clean)
+  }
+}
+
+#apply the function and bind into one dataframe
+clean_training_dfs <- lapply(files, clean_df) %>% compact()
+training_df <- bind_rows(clean_training_dfs)
+```
+
+Imputing missing values with random forest
+
+```{r, eval = FALSE}
+# Columns to ignore
+ignore_cols <- c("Biogm2", "Species", "tsf_0_5", "tsf_5_10", "tsf_10_15", "tsf_15_20")
+
+# Split the dataframe
+df_to_impute <- training_df[, !(names(training_df) %in% ignore_cols)]
+df_ignored <- training_df[, (names(training_df) %in% ignore_cols)]
+
+# miss forest on missing data columns
+set.seed(614)
+imputed_result <- missForest(df_to_impute)
+df_imputed <- imputed_result$ximp
+
+# recombine
+training_df_imputed <- cbind(df_ignored, df_imputed)
+# reorder columns
+training_df_imputed <- training_df_imputed[, names(training_df)]
+#write.csv(training_df_imputed, "data/processed/csv/training_df_imputed.csv", row.names = FALSE)
+```
+
+Model fitting function (species specific)
+
+```{r, eval = FALSE}
+species <- c("black spruce", "white spruce", "resin birch", "quaking aspen")
+
+train_model <- function(df, species, response="Biogm2") {
+  print(paste0("running model for: ", species))
+  
+  #filter to one species
+  training_df_one_spp <- training_df_imputed %>% filter(Species == species)
+  predictors <- setdiff(names(training_df_one_spp), c("Species", "Biogm2"))#36 before screening
+  formula <- as.formula(paste(response, "~", paste(predictors, collapse = "+")))
+  
+  #tidy models recipe (swapping in entire dataset)
+  recipe <- recipe(formula = formula, data = training_df_one_spp) %>% 
+    step_nzv(all_predictors()) %>%
+    step_corr(all_numeric_predictors(), threshold = 0.80, use = "pairwise.complete.obs", method = "pearson") %>%
+    step_impute_mean(all_numeric_predictors())%>%#make sure the recipe can handle NAs
+    step_normalize(all_numeric_predictors())
+    
+  #grid search for optimal parms
+  model_specs <- rand_forest(mtry = tune(), 
+                             trees = tune(),
+                             min_n = tune()) %>% set_mode("regression") %>% set_engine("randomForest", proximity = TRUE)
+  
+  grid_parms <- expand.grid(mtry = seq(5, 10, 5), 
+                            trees = seq(300,800,250), 
+                            min_n = seq(1, 12, 6))
+  
+  #cross validation
+  nfold <- 5
+  print(paste0("performing cross validation across ", nfold, " folds"))
+  pv_folds <- vfold_cv(training_df_one_spp, v = nfold, strata = all_of(response))
+
+  #pull workflow results
+  tuned_results <- workflow() %>% add_recipe(recipe) %>% add_model(model_specs) %>% 
+    tune_grid(resamples = pv_folds, grid = grid_parms, metrics = metric_set(rmse, rsq, mae))
+  autoplot(tuned_results)
+  best_params <- select_best(tuned_results, metric="rmse")
+  wflow <- finalize_workflow(workflow() %>% add_recipe(recipe) %>% add_model(model_specs), best_params)
+  
+  #fit across the resamples
+  fit <- fit_resamples(wflow, resamples = pv_folds, metrics = metric_set(rmse, rsq, mae))
+  mean_rmse <- collect_metrics(fit) %>% filter(.metric == "rmse") %>% pull(mean)
+  mean_rsq <- collect_metrics(fit) %>% filter(.metric == "rsq") %>% pull(mean)
+  
+  #print accuracy across resamples
+  print(paste("Mean RMSE across folds: ", mean_rmse))
+  print(paste("Mean R² across folds: ", mean_rsq))
+  
+  #pull out-of-fold predictions for accuracy plot
+  ctrl <- control_resamples(save_pred=TRUE)
+  resample_results <- wflow %>% 
+    fit_resamples(resamples = pv_folds, control = ctrl)
+  all_preds <- resample_results %>%
+    collect_predictions() %>%
+    mutate(Species = species)
+  write.csv(all_preds, paste0("data/processed/csv/folded_pred_vs_obs_", 
+                             gsub(" ", "_", species), ".csv"))
+  
+  #store and save final fit
+  final_fit <- fit(wflow, training_df_one_spp)
+  filename <- paste0("models/final_fit_", gsub(" ", "_", species), ".rds")
+  #saveRDS(final_fit, file = filename)
+  print(paste("Model saved to:", filename))
+  
+  return(list(model = final_fit, 
+              species = species, 
+              mean_rmse = mean_rmse, 
+              mean_rsq = mean_rsq))
+}
+
+#run the models
+model_output <- lapply(species, function(spp){train_model(training_df_imputed,species=spp)})
+```
+
+Printing model accuracy metrics
+
+```{r, eval = FALSE}
+cv_summary <- map_dfr(model_output, function(x) {
+  tibble(
+    Species = x$species,
+    RMSE_cv = x$mean_rmse,
+    R2_cv = x$mean_rsq
+  )
+})
+```

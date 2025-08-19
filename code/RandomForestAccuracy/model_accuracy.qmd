@@ -1,0 +1,119 @@
+---
+title: "Plotting prediction accuracy"
+author: "Wesley Rancher"
+date: "2025-07-07"
+date-modified: last-modified
+categories: [tidymodels, randomForest, ggplot2, patchwork]
+title-block-banner: false
+title-block-banner-color: white
+---
+
+```{r, eval = FALSE}
+library(tidymodels)
+library(ggplot2)
+library(viridis)
+library(patchwork)
+library(Metrics)
+```
+
+Model fits obtained from model_fitting.Rmd
+
+```{r, eval = FALSE}
+files <- list.files("data/processed/csv", pattern = "folded_", full.names = TRUE)
+
+#read in csvs from model fitting code
+dfs <- lapply(files, read.csv)
+main_plot_df <- do.call(rbind, dfs) %>%
+  mutate(Species = case_when(
+    Species == "black spruce" ~ "Black spruce",
+    Species == "white spruce" ~ "White spruce",
+    Species == "resin birch" ~ "Alaskan birch",
+    Species == "quaking aspen" ~ "Trembling aspen",
+    TRUE ~ Species
+  ))
+```
+
+Visualize
+
+```{r, eval = FALSE}
+#factor the species
+main_plot_df <- main_plot_df %>%
+  mutate(Species = factor(Species, levels = c("Black spruce", "White spruce", "Alaskan birch", "Trembling aspen")))%>%
+  rename(Predicted = .pred,
+         Observed = Biogm2)
+
+#summary table 
+summary_df <- main_plot_df %>%
+  group_by(Species) %>%
+  summarise(
+    Observed_Min = round(min(Observed), 1),
+    Observed_Max = round(max(Observed), 1),
+    Observed_Mean = round(mean(Observed), 1),
+    Predicted_Min = round(min(Predicted), 1),
+    Predicted_Max = round(max(Predicted), 1),
+    MAE = round(yardstick::mae_vec(Observed, as.numeric(Predicted)), 1),
+    RMSE = round(yardstick::rmse_vec(Observed, as.numeric(Predicted)), 1),
+    R2 = round(yardstick::rsq_vec(Observed, as.numeric(Predicted)), 1)
+  )
+
+#join model metrics df with main
+annot_df <- left_join(main_plot_df, summary_df, by = "Species") %>%
+  group_by(Species) %>%
+  slice(1) %>%
+  ungroup() %>%
+  mutate(
+    label = paste0(
+      "R² = ", R2, "\n",
+      "RMSE = ", RMSE, " g m-2\n",
+      "MAE = ", MAE, " g m-2"
+    ),
+    xpos = 0,
+    ypos = 1700
+  )
+
+#plot
+validation_plot <- ggplot(main_plot_df, aes(x = Predicted, y = Observed, color = abs(Observed - Predicted))) +
+  geom_point(size = 4, alpha = .5, shape = 16) +
+  geom_smooth(method = "lm", color = "black", linetype = "solid", se = FALSE) +
+  geom_abline(slope = 1, intercept = 0, linetype = "dashed") +
+  scale_color_viridis(option = "turbo", direction = 1) +
+  facet_wrap(~Species) +
+  geom_text(data = annot_df, aes(x = xpos, y = ypos, label = label),
+            inherit.aes = FALSE, size = 4.5, family = "Times New Roman", hjust = 0) +
+  theme_bw(base_family = "Times New Roman") +
+  scale_x_continuous(limits = c(0, 2000)) +
+  scale_y_continuous(limits = c(0, 2000)) +
+  labs(x = "Biomass Predicted (g m-2)",
+       y = "Biomass Observed (g m-2)",
+       color = "Difference (g m-2)") +
+  theme(
+    axis.text = element_text(color = "black", size = 14),
+    axis.text.x = element_text(color = "black", size = 14),
+    plot.title = element_text(color = "black", size = 20),
+    axis.title.y = element_text(color = "black", size = 18),
+    axis.title.x = element_text(color = "black", size = 18, vjust = -.25),
+    strip.text = element_text(color = "black", size = 13.5),
+    legend.position = "inside",
+    legend.position.inside = c(0.9, 0.125),
+    legend.background = element_blank(),
+    legend.frame = element_rect(color = "black"),
+    legend.box.background = element_rect(),
+    legend.key.size = unit(0.4, "cm"),
+    legend.title = element_text(size = 10),
+    legend.spacing = unit(0.2, "cm"),
+    legend.text = element_text(color = "black", size = 10),
+    panel.grid.major = element_line(color = "gray70", linewidth = .25),
+    panel.grid.minor = element_blank()
+  )
+validation_plot
+```
+
+Saving chunk
+
+```{r, eval = FALSE}
+png("results/graphs/model_accuracy.png", width = 7, height = 6, units = "in", res = 300)
+print(validation_plot)
+dev.off()
+```
+
+![](images/clipboard-292988717.png)

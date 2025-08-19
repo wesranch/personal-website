@@ -1,0 +1,80 @@
+---
+title: Mosaic rasters
+author: 'Wesley Rancher'
+date: 2024-12-27
+date-modified: last-modified
+categories: [R, GEE, Landsat, image-processing]
+title-block-banner: false
+title-block-banner-color: white
+editor_options: 
+  chunk_output_type: console
+---
+
+Often, GEE will output files in chunks. So if you have many years of imagery which you need to stitch together, then you could iterate using this for loop in R. In this example we are just working with imagery from one year.
+
+```{r, eval = FALSE, echo = TRUE}
+library(terra)
+```
+
+Directories
+
+```{r}
+# dir and outdir
+file_dir <- "/Users/wancher/Documents/weranch/code/tiffs/"
+#setwd(file_dir)
+
+# read in the rasters 
+list_of_files <- list.files(file_dir, pattern = "S1A-.*\\.tif$", full.names = TRUE)
+```
+
+```{r}
+# iterate over a sequence of years and pull out files specific to the year in the sequence
+# mosaics <- list()
+# years <- seq(2019, 2023)
+# years_string <- as.character(years)
+# for (i in seq_along(years_string)) {
+#   
+#   #pull out unique year
+#   year <- years_string[[i]]
+#   files_one_year <- list_of_files[grepl(year, list_of_files)]
+  files_one_year <- list_of_files
+
+  
+  list_of_rasters <- lapply(files_one_year, function(file) {
+    r <- rast(file)
+    r
+  })
+  
+  
+  # turn list in sprc and mosaic
+  coll_of_rasters <- sprc(list_of_rasters)
+  #print(paste0(year, " start: ", Sys.time()))
+  mosaiced_raster <- merge(coll_of_rasters) 
+  #print(paste0(year, " finish: ", Sys.time()))
+  #names(mosaiced_raster) <- band_names
+  #print(names(mosaiced_raster))
+  #save it
+  # output_filename <- paste0(file_dir, "s1v-mosaic-", year, ".tif")
+  # print(output_filename)
+  # #writeRaster(mosaiced_raster, filename = output_filename, filetype = "GTiff", overwrite = TRUE)
+  # mosaics[[i]] <- mosaiced_raster
+  # rm(list_of_rasters, coll_of_rasters, mosaiced_raster)
+  # gc()
+#}
+```
+
+Visualize the tiles
+
+```{r}
+#without mosaicing
+for (r in list_of_rasters){
+  plot(r)
+}
+```
+
+Visualize the mosaic
+
+```{r}
+#after mosaic
+plot(mosaiced_raster, main = "Summer 2023 C Band Mosaic")
+```

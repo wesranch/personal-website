@@ -1,4 +1,5 @@
-*.pdf
-*.jpg
-*.jpeg
-*.png
+portfolio/RancherFinalMap_RGB_ForScreen.pdf
+!*.jpg
+!*.jpeg
+!*.png
+!*.pdf
