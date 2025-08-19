@@ -16,8 +16,6 @@
 *.tex
 
 #config
-_publish.yml
-
 /.quarto/
 
 #large map file
