@@ -18,7 +18,7 @@ library(terra)
 Just working with one file in this example. But you can imagine reading in a list of files and performing this operation iteratively with a for loop.
 
 ```{r}
-r <- rast("../ndwi_ice_small.tif")
+r <- rast("ndwi_ice_small.tif")
 plot(r)
 ```
 
