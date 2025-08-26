@@ -1,0 +1,2 @@
+*.tif filter=lfs diff=lfs merge=lfs -text
+portfolio/RancherFinalMap_RGB_ForScreen.pdf filter=lfs diff=lfs merge=lfs -text

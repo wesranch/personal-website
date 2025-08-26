@@ -14,13 +14,14 @@
 *.aux
 *.out
 *.tex
+#*.tif
 
 #config
 /.quarto/
 
 #large map file
-portfolio/RancherFinalMap_RGB_ForScreen.pdf
-_site/portfolio/RancherFinalMap_RGB_ForScreen.pdf
+#portfolio/RancherFinalMap_RGB_ForScreen.pdf
+#_site/portfolio/RancherFinalMap_RGB_ForScreen.pdf
 
 # Allow all other images and PDFs
 !*.jpg
