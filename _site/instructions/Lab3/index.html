@@ -74,7 +74,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <link href="../../site_libs/quarto-html/quarto-syntax-highlighting-e26003cea8cd680ca0c55a263523d882.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../../site_libs/bootstrap/bootstrap-a1aec47332d55c002fe6faa7b7735926.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="../../site_libs/bootstrap/bootstrap-ca18fbd2e8790c6568535d603d3b1e7c.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -107,7 +107,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <link rel="stylesheet" href="../../styles.css">
 </head>
 
-<body class="floating nav-fixed">
+<body class="nav-fixed fullcontent">
 
 <div id="quarto-search-results"></div>
   <header id="quarto-header" class="headroom fixed-top">
@@ -154,36 +154,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <!-- content -->
 <div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
 <!-- sidebar -->
-  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
-    <nav id="TOC" role="doc-toc" class="toc-active">
-    <h2 id="toc-title">Contents</h2>
-   
-  <ul>
-  <li><a href="#software" id="toc-software" class="nav-link active" data-scroll-target="#software">Software:</a>
-  <ul class="collapse">
-  <li><a href="#overview" id="toc-overview" class="nav-link" data-scroll-target="#overview">Overview</a></li>
-  <li><a href="#part-one" id="toc-part-one" class="nav-link" data-scroll-target="#part-one">Part One</a>
-  <ul class="collapse">
-  <li><a href="#unsupervised-pixel-based-classification" id="toc-unsupervised-pixel-based-classification" class="nav-link" data-scroll-target="#unsupervised-pixel-based-classification">Unsupervised Pixel Based Classification</a></li>
-  </ul></li>
-  <li><a href="#part-two" id="toc-part-two" class="nav-link" data-scroll-target="#part-two">Part Two</a>
-  <ul class="collapse">
-  <li><a href="#supervised-pixel-based-classification" id="toc-supervised-pixel-based-classification" class="nav-link" data-scroll-target="#supervised-pixel-based-classification">Supervised Pixel Based Classification</a></li>
-  <li><a href="#questions-for-parts-one-and-two" id="toc-questions-for-parts-one-and-two" class="nav-link" data-scroll-target="#questions-for-parts-one-and-two">Questions for parts one and two:</a></li>
-  </ul></li>
-  <li><a href="#part-three" id="toc-part-three" class="nav-link" data-scroll-target="#part-three">Part Three</a>
-  <ul class="collapse">
-  <li><a href="#change-detection" id="toc-change-detection" class="nav-link" data-scroll-target="#change-detection">Change Detection</a></li>
-  <li><a href="#questions-for-part-three" id="toc-questions-for-part-three" class="nav-link" data-scroll-target="#questions-for-part-three">Questions for part three:</a></li>
-  </ul></li>
-  </ul></li>
-  </ul>
-</nav>
-</nav>
-<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
 <!-- margin-sidebar -->
-    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar zindex-bottom">
-    </div>
+    
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
@@ -268,7 +240,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <section id="part-one" class="level2">
 <h2 class="anchored" data-anchor-id="part-one">Part One</h2>
 <p>First, consider: what is it you would like to investigate about the landscape? How will you set up your classification schema? Create a classification key with class, value, and color as columns for reference. You have to freedom over what this looks like and it is purely for reference. Use excel, notepad, or word create one. Here is mine:</p>
-<table class="table">
+<table class="caption-top table">
 <thead>
 <tr class="header">
 <th>Class</th>
@@ -424,11 +396,11 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <li>At the bottom of your screen type this and press enter</li>
 </ul></li>
 </ul>
-<div id="6b4a2882" class="cell">
+<div id="2d4c0a8e" class="cell">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pip</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Now type this and press enter</p>
-<div id="1c1dbdef" class="cell">
+<div id="cadea68c" class="cell">
 <div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>pip.main([<span class="st">'install'</span>, <span class="st">'scikit-learn'</span>])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <ul>
@@ -911,8 +883,6 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     }
   }
 });
-</script>
-<script src="https://utteranc.es/client.js" repo="k8hayes/BlogComments" issue-term="pathname" theme="github-light" crossorigin="anonymous" async="">
 </script>
 </div> <!-- /content -->
 

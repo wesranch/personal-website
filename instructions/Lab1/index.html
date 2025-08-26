@@ -40,7 +40,7 @@ ul.task-list li input[type="checkbox"] {
 <link href="../../site_libs/quarto-html/quarto-syntax-highlighting-e26003cea8cd680ca0c55a263523d882.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../../site_libs/bootstrap/bootstrap-a1aec47332d55c002fe6faa7b7735926.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="../../site_libs/bootstrap/bootstrap-ca18fbd2e8790c6568535d603d3b1e7c.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -73,7 +73,7 @@ ul.task-list li input[type="checkbox"] {
 <link rel="stylesheet" href="../../styles.css">
 </head>
 
-<body class="floating nav-fixed slimcontent">
+<body class="nav-fixed fullcontent">
 
 <div id="quarto-search-results"></div>
   <header id="quarto-header" class="headroom fixed-top">
@@ -120,27 +120,10 @@ ul.task-list li input[type="checkbox"] {
 <!-- content -->
 <div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
 <!-- sidebar -->
-  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
-    <nav id="TOC" role="doc-toc" class="toc-active">
-    <h2 id="toc-title">Contents</h2>
-   
-  <ul>
-  <li><a href="#an-image-is-worth-at-least-a-thousand-words" id="toc-an-image-is-worth-at-least-a-thousand-words" class="nav-link active" data-scroll-target="#an-image-is-worth-at-least-a-thousand-words"><strong>An Image is Worth at Least a Thousand Words</strong></a>
-  <ul class="collapse">
-  <li><a href="#summary" id="toc-summary" class="nav-link" data-scroll-target="#summary"><strong>Summary</strong></a></li>
-  <li><a href="#software-and-tools" id="toc-software-and-tools" class="nav-link" data-scroll-target="#software-and-tools"><strong>Software and tools</strong></a></li>
-  <li><a href="#what-you-are-going-to-submit" id="toc-what-you-are-going-to-submit" class="nav-link" data-scroll-target="#what-you-are-going-to-submit"><strong>What you are going to submit</strong></a></li>
-  <li><a href="#check-out-this-demo" id="toc-check-out-this-demo" class="nav-link" data-scroll-target="#check-out-this-demo"><strong>Check out this demo</strong></a></li>
-  </ul></li>
-  </ul>
-</nav>
-</nav>
-<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
 <!-- margin-sidebar -->
-    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar zindex-bottom">
-    </div>
+    
 <!-- main -->
-<main class="content page-columns page-full" id="quarto-document-content">
+<main class="content" id="quarto-document-content">
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
@@ -184,17 +167,17 @@ ul.task-list li input[type="checkbox"] {
 </header>
 
 
-<section id="an-image-is-worth-at-least-a-thousand-words" class="level1 page-columns page-full">
+<section id="an-image-is-worth-at-least-a-thousand-words" class="level1">
 <h1><strong>An Image is Worth at Least a Thousand Words</strong></h1>
-<section id="summary" class="level3 page-columns page-full">
+<section id="summary" class="level3">
 <h3 class="anchored" data-anchor-id="summary"><strong>Summary</strong></h3>
 <p>A useful tip when working with remote sensing data is to consider beginning your workflow by visualizing your data in true color. This can serve as reference prior to processing so that you can toggle the changes you make on and off and make semi-informed interpretations, at least at the beginning. There is SO much remote sensing data that is freely available but the go-to data source is often Landsat because of its historical record. It is also relatively easy to download Landsat imagery with different levels of processing (for example, surface reflectance vs top-of-atmosphere reflectance products vs analysis ready data), which can take a lot of steps out of the scientific process for us but means we have less influence how the processing is applied. Nonetheless the surface reflectance product from Landsat has been used in many studies, here is a good <a href="https://www.sciencedirect.com/science/article/pii/S0034425722003054">review paper</a>.</p>
 <p>As for data, I’ll provide USGS’s <a href="https://earthexplorer.usgs.gov/">EarthExplorer</a> for your reference, which is a simple, web-based archive of satellite and aerial imagery and indices from various sources. You will need to create an account to download data. You are not limited to EarthExplorer, there are other sources like The National Map, ArcGIS online, and Google Earth Engine (GEE). We will introduce (GEE) in future labs when we need more data.</p>
 <p>Inside EarthExplorer, you can filter your data search spatially, temporally, and by cloud cover. Try to get logged on, drop a pin on or near Mount St Helens and define a date range and cloud cover percentage (lower cloud cover is great). [Check out this demo] for steps to download and visualize!</p>
-<div class="quarto-figure quarto-figure-center page-columns page-full">
-<figure class="figure page-columns page-full">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
 <p><img src="tcc-ss.jpeg" class="img-fluid figure-img" width="426"></p>
-<figcaption class="margin-caption">Figure 1: True Color Composite of Landsat 8 (RED, GREEN, BLUE)</figcaption>
+<figcaption>Figure 1: True Color Composite of Landsat 8 (RED, GREEN, BLUE)</figcaption>
 </figure>
 </div>
 </section>
@@ -212,7 +195,7 @@ ul.task-list li input[type="checkbox"] {
 <p>This lab relies on QGIS which is an open-source platform that we will use for most of our visualization and image manipulation. However, examples of different approaches techniques using alternative software R, GEE and Python are provided in future labs.</p>
 <hr>
 </section>
-<section id="what-you-are-going-to-submit" class="level3 page-columns page-full">
+<section id="what-you-are-going-to-submit" class="level3">
 <h3 class="anchored" data-anchor-id="what-you-are-going-to-submit"><strong>What you are going to submit</strong></h3>
 <ul>
 <li><p>A PDF documenting the steps you took to create a true color and or false image composites from raw satellite imagery. This can be as detailed as you want, but you must obtain imagery from 5 distinct satellite or aerial sources, display and manipulate each image in QGIS (documenting your methods).</p></li>
@@ -220,10 +203,10 @@ ul.task-list li input[type="checkbox"] {
 <li><p>Review advantages and disadvantages and which datasets might be useful as we continue to study the region</p></li>
 <li><p>A brief reflection on the types of imagery you would use for specific studies</p></li>
 </ul>
-<div class="quarto-figure quarto-figure-center page-columns page-full">
-<figure class="figure page-columns page-full">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
 <p><img src="fcc-ss.jpeg" class="img-fluid figure-img" width="493"></p>
-<figcaption class="margin-caption">Figure 2: False Color Composite of Landsat 8 (SWIR2, NIR, RED)</figcaption>
+<figcaption>Figure 2: False Color Composite of Landsat 8 (SWIR2, NIR, RED)</figcaption>
 </figure>
 </div>
 </section>
@@ -652,8 +635,6 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     }
   }
 });
-</script>
-<script src="https://utteranc.es/client.js" repo="k8hayes/BlogComments" issue-term="pathname" theme="github-light" crossorigin="anonymous" async="">
 </script>
 </div> <!-- /content -->
 
