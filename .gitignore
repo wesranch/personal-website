@@ -14,14 +14,16 @@
 *.aux
 *.out
 *.tex
-#*.tif
+*.tif
+!*/code/RasterSieving/ndwi_ice_small.tif
+!*_site/code/RasterSieving/ndwi_ice_small.tif
 
 #config
 /.quarto/
 
 #large map file
-#portfolio/RancherFinalMap_RGB_ForScreen.pdf
-#_site/portfolio/RancherFinalMap_RGB_ForScreen.pdf
+portfolio/RancherFinalMap_RGB_ForScreen.pdf
+_site/portfolio/RancherFinalMap_RGB_ForScreen.pdf
 
 # Allow all other images and PDFs
 !*.jpg
