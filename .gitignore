@@ -15,9 +15,8 @@
 *.out
 *.tex
 *.tif
-!*/code/RasterSieving/ndwi_ice_small.tif
+!*code/RasterSieving/ndwi_ice_small.tif
 !*_site/code/RasterSieving/ndwi_ice_small.tif
-
 #config
 /.quarto/
 
