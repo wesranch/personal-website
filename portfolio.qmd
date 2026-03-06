@@ -50,8 +50,6 @@ title-block-banner-color: white
 <div class="pdf-gallery" id="gallery">
   <div class="pdf-card"><a href="portfolio/RancherFinalMap_RGB_ForScreen.pdf" target="_blank"><img src="portfolio/RancherFinalMap_RGB_ForScreen_thumb.jpg"><div class="pdf-title">Advanced Cartography Project</div><div class="pdf-meta">PDF</div></a></div>
   
-  <div class="pdf-card"><a href="portfolio/TamariskDist_map.pdf" target="_blank"><img src="portfolio/TamariskDist_map_thumb.jpg"><div class="pdf-title">Invasive Species Map</div><div class="pdf-meta">PDF</div></a></div>
-  
   <div class="pdf-card"><a href="portfolio/AGU_poster.pdf" target="_blank"><img src="portfolio/AGU_poster_thumb.jpg"><div class="pdf-title">AGU Poster</div><div class="pdf-meta">PDF</div></a></div>
     
   <div class="pdf-card"><a href="portfolio/wr_reburns_v7.pdf" target="_blank"><img src="portfolio/wr_reburns_v7_thumb.jpg"><div class="pdf-title">LANDIS-II Output Maps</div><div class="pdf-meta">PDF</div></a></div>
