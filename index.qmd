@@ -22,11 +22,11 @@ format:
 
 # Hi, I’m Wesley!
 
-I'm a GIS Analyst at American Electric Power, where I use spatial analysis, remote sensing, and data engineering to support real estate decisions and land use planning for critical infrastructure. I graduated from the University of Oregon with an MS in 2025, and my background spans remote sensing, machine learning, and ecological modeling.
+I'm a GIS Analyst at American Electric Power, where I use spatial analysis, remote sensing, and data engineering to support real estate decisions for critical infrastructure. I graduated from the University of Oregon with an MS in 2025, and my background spans remote sensing, machine learning, and ecological modeling.
 
 ## On this site, you’ll find:
 
--   Code I've developed for spatial data analysis and using R
+-   Code I've developed for spatial data analysis using R
 -   Lab materials I’ve written to support remote sensing and GIS instruction for undergraduate and graduate students
 -   Maps, posters, and links to research articles
 
