@@ -1,6 +1,6 @@
 ---
 title: "Wesley Rancher"
-subtitle: "Environmental Data Scientist"
+subtitle: "Geospatial Analyst"
 summary: ""
 about:
   template: trestles
@@ -20,14 +20,14 @@ format:
     toc: false
 ---
 
-# Hi there, I’m Wesley!
+# Hi, I’m Wesley!
 
-I'm a GIS Analyst at American Electric Power, where I use GIS and data analysis to inform real estate decisions and land use planning. I recently completed a Master's degree in Geography, and my thesis investigated 25 years of forest composition change in Alaska using satellite imagery, machine learning, and simulation modeling.
+I'm a GIS Analyst at American Electric Power, where I use spatial analysis, remote sensing, and data engineering to support real estate decisions and land use planning for critical infrastructure. I graduated from the University of Oregon with an MS in 2025, and my background spans remote sensing, machine learning, and ecological modeling.
 
 ## On this site, you’ll find:
 
--   Code snippets for spatial data analysis using R
--   Lab materials I’ve developed to support remote sensing and GIS instruction
+-   Code I've developed for spatial data analysis and using R
+-   Lab materials I’ve written to support remote sensing and GIS instruction for undergraduate and graduate students
 -   Maps, posters, and links to research articles
 
 ------------------------------------------------------------------------
