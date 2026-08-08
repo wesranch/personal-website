@@ -10,7 +10,7 @@ title-block-banner-color: white
 
 Libraries
 
-```{r, eval = FALSE, echo = TRUE}
+```{r, eval = TRUE, echo = FALSE}
 library(dplyr)
 library(tidyverse)
 library(stringr)
@@ -23,9 +23,9 @@ library(missForest)
 
 Clean training data
 
-```{r, eval = FALSE}
+```{r, eval = TRUE}
 #annual csvs
-files <- list.files("data/processed/csv/", pattern = "pixel-vals-fire", full.names = TRUE)
+files <- list.files("/Users/wancher/Repos/AlaskaVegg/data/processed/csv/", pattern = "pixel-vals-fire", full.names = TRUE)
 
 clean_df <- function(file){
   #read in
@@ -54,6 +54,7 @@ clean_df <- function(file){
 #apply the function and bind into one dataframe
 clean_training_dfs <- lapply(files, clean_df) %>% compact()
 training_df <- bind_rows(clean_training_dfs)
+print(summary(training_df))
 ```
 
 Imputing missing values with random forest
