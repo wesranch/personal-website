@@ -55,7 +55,9 @@ title-block-banner-color: white
   <div class="pdf-card"><a href="portfolio/wr_reburns_v7.pdf" target="_blank"><img src="portfolio/wr_reburns_v7_thumb.jpg"><div class="pdf-title">LANDIS-II Output Maps</div><div class="pdf-meta">PDF</div></a></div>
   
   <div class="pdf-card"><a href="portfolio/GraphicalAbstract-Albedo-v2.png" target="_blank"><img src="portfolio/GraphicalAbstract-Albedo-v2.png"><div class="pdf-title">Graphical Abstract of Albedo Vegetation Feedbacks</div><div class="pdf-meta">PDF</div></a></div>
-  
+
+  <div class="pdf-card"><a href="portfolio/RouteMap_Final.pdf" target="_blank"><img src="portfolio/RouteMap_Final.png"><div class="pdf-title">Amtrak Empire Builder Route</div><div class="pdf-meta">PDF</div></a></div>
+    
   <div class="pdf-card"><a href="portfolio/lab2layout_RancherV2.pdf" target="_blank"><img src="portfolio/lab2layout_RancherV2_thumb.jpg"><div class="pdf-title">Advanced Cartography Submission</div><div class="pdf-meta">PDF</div></a></div>
     
   <div class="pdf-card"><a href="portfolio/Rancher_Lab3Layout.pdf" target="_blank"><img src="portfolio/Rancher_Lab3Layout_thumb.jpg"><div class="pdf-title">Advanced Cartography Submission</div><div class="pdf-meta">PDF</div></a></div>
