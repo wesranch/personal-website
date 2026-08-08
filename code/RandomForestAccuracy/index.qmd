@@ -23,7 +23,7 @@ library(missForest)
 
 Clean training data
 
-```{r, eval = TRUE}
+```{r, eval = TRUE, echo=TRUE}
 #annual csvs
 files <- list.files("/Users/wancher/Repos/AlaskaVegg/data/processed/csv/", pattern = "pixel-vals-fire", full.names = TRUE)
 
