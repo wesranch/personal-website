@@ -28,7 +28,7 @@ editor_options:
 
 Install terra and other packages. Terra is the main library that will let us work with spatial data
 
-```{r, echo=TRUE, eval=FALSE}
+```{r, echo=FALSE, eval=TRUE}
 #install.packages("terra")
 #install.packages("RStoolbox")
 #install.packages("ggplot2")
@@ -46,7 +46,7 @@ library(tmap)
 
 Let's figure out where we are and get where we need to be
 
-```{r, echo=TRUE, eval=FALSE}
+```{r, echo=FALSE, eval=FALSE}
 #this prints the working directory
 getwd()
 
@@ -59,23 +59,23 @@ getwd()
 
 Read in a single image
 
-```{r, echo=TRUE, eval=FALSE}
+```{r, echo=TRUE, eval=TRUE}
 # the arrow is the same as =
 # replace with your file name
 dir <- "/Users/wancher/Documents/rs_485/input_data/"
 r <- rast(paste0(dir,"landsat_panchro_2023.tif"))
-r
+print(r)
 ```
 
 This is how you can plot something
 
-```{r, echo=TRUE, eval=FALSE}
+```{r, echo=TRUE, eval=TRUE}
 plot(r)
 ```
 
 Print summary statistics and plot a histogram
 
-```{r, echo=TRUE, eval=FALSE}
+```{r, echo=TRUE, eval=TRUE}
 summary(r)
 hist(r)
 ```
@@ -91,7 +91,7 @@ OR
 
 We can read in all of the tiff files from our current working folder and store them in a list
 
-```{r, echo=TRUE, eval=FALSE}
+```{r, echo=TRUE, eval=TRUE}
 dir <- "/Users/wancher/Documents/rs_485/input_data"
 list_of_files <- list.files(dir, pattern="*.tif", full.names = TRUE)
 list_of_files
@@ -99,7 +99,7 @@ list_of_files
 
 This is just a list of the file paths. So let's convert it to list of rasters or SpatRasters as terra puts it
 
-```{r, echo=TRUE, eval=FALSE}
+```{r, echo=TRUE, eval=TRUE}
 #lapply means list apply. So perform terra's rast function on a list of items
 list_of_rasters <- lapply(list_of_files, rast)
 
@@ -111,7 +111,7 @@ names(list_of_rasters) <- list_of_files
 
 We can write a for loop to do things in iteration. Let's say we want to plot each image in our list of rasters.
 
-```{r, echo=TRUE, eval=FALSE}
+```{r, echo=FALSE, eval=FALSE}
 #for each each raster in the sequence, do x thing...
 for (i in seq_along(list_of_rasters)){
 	one_image <- list_of_rasters[[i]]
@@ -128,7 +128,7 @@ for (i in seq_along(list_of_rasters)){
 
 Now... let's plot in true color using the plotrgb function
 
-```{r, echo=TRUE, eval=FALSE}
+```{r, echo=TRUE, eval=TRUE}
 #just one image and band
 plot(list_of_rasters[[1]]) #here I am just reaching into the list of rasters and grabbing the 2nd item and Band 3
 names(list_of_rasters[[1]])
@@ -139,7 +139,7 @@ plotRGB(list_of_rasters[[7]], r=4, g=3, b=2, stretch = "lin")
 
 Let's do the same thing using a for loop over the entire list of rasters. You can decide if you want to use something like a for loop for the later enhancement techniques or if you would prefer to write things out line by line.
 
-```{r PLOT TRUE COLOR, echo=TRUE, eval=FALSE}
+```{r PLOT TRUE COLOR, echo=FALSE, eval=FALSE}
 #iterate 
 for (raster in list_of_rasters){
   #if there is more than one band in the raster then...
@@ -173,11 +173,11 @@ Screenshots: Answers to questions above alongside 3 screenshots. Select one year
 
 ### **Pansharpening**
 
-```{r PANSHARPEN, echo=TRUE, eval=FALSE}
+```{r PANSHARPEN, echo=TRUE, eval=TRUE}
 #print the spatial resolution
-res(list_of_rasters[[1]])
-res(list_of_rasters[[7]])
-res(list_of_rasters[[14]])
+#res(list_of_rasters[[1]])
+#res(list_of_rasters[[7]])
+#res(list_of_rasters[[14]])
 
 #you'll notice that there is a difference in spatial resolution between the landsat raw bands, landsat panchromatic, and sentinel. Since the goal here is to compare across Landsat and Sentinel we will downsample our landsat rawbands to the higher resolution of the panchromatic band (from 30m down to 15m).
 
@@ -208,7 +208,7 @@ Question 4: Answers to questions and pansharpen one of your Landsat images and s
 
 Rename the bands so operations only need cast once.
 
-```{r RENAME, echo=TRUE, eval=FALSE}
+```{r RENAME, echo=TRUE, eval=TRUE}
 #rename the bands so we can write a universal equation
 band_names_landsat <- c("aerosol", "blue", "green", "red", "nir", "swir1", "swir2")
 band_names_sentinel <- c("blue", "green", "red", "rededge1", "rededge2", "rededge3", "nir", "rededge4", "swir1", "swir2")
@@ -231,8 +231,8 @@ list_of_rasters_renamed <- list_of_rasters_renamed[-c(1:6)]#rm the panchro image
 
 Stretch one image
 
-```{r, echo=TRUE, eval=FALSE}
-test_image <- list_of_rasters_renamed[[12]]
+```{r, echo=TRUE, eval=TRUE}
+test_image <- list_of_rasters_renamed[[6]]
 hist(test_image$red)#red for example
 plot(test_image$red)
 
@@ -291,11 +291,11 @@ list_of_stretched_rasters <- lapply(list_of_rasters_renamed, apply_stretch)
 
 Let's grab an image and try it:
 
-```{r, echo=TRUE, eval=FALSE}
+```{r, echo=TRUE, eval=TRUE}
 #dollar sign indexing is what this is called 
 #i like to follow good ole PEMDAS pretty closely when I do band math just to be cautious
-test_ndvi <- (r_stretched$B8- r_stretched$B4) / 
-             (r_stretched$B8 + r_stretched$B4)
+test_ndvi <- (r_stretched$B8- r_stretched$red) / 
+             (r_stretched$B8 + r_stretched$red)
 summary(test_ndvi)
 
 hist(test_ndvi)
@@ -304,7 +304,7 @@ plot(test_ndvi)
 
 Visualizing a different way
 
-```{r, echo=TRUE, eval=FALSE}
+```{r, echo=TRUE, eval=TRUE}
 #different color palette
 ndvi_palette <- colorRampPalette(c("#FFFF00", "#FF0000", "#FF00FF", "#0000FF", "#639200"))(100)
 
@@ -324,7 +324,7 @@ Screenshots: Take a screenshot of the test NDVI you produced in the default colo
 
 Let's write a function to compute ndvi for each image and then apply it to the list of rasters.
 
-```{r EQUATIONS, echo=TRUE, eval=FALSE}
+```{r EQUATIONS, echo=TRUE, eval=TRUE}
 #write functions to calculate ndvi
 calculate_ndvi <- function(raster){
   ndvi <- (raster$nir - raster$red) / (raster$nir + raster$red)
@@ -340,7 +340,7 @@ list_of_ndvis <- lapply(list_of_stretched_rasters, calculate_ndvi)
 
 Here is an example:
 
-```{r SUMMARIZE, echo=TRUE, eval=FALSE}
+```{r SUMMARIZE, echo=TRUE, eval=TRUE}
 #example of how to convert a raster to a dataframe
 df <- as.data.frame(r) #not going to use it but this is the basic function you need (line 349)
 
@@ -370,7 +370,7 @@ combined_df <- do.call(rbind, list_of_dfs) #rowbind the dataframes into one data
 
 Plot
 
-```{r, echo=TRUE, eval=FALSE}
+```{r, echo=TRUE, eval=TRUE}
 #plotting through time using ggplot library
 ggplot(combined_df, aes(x = year, y = Avg_NDVI, color = source)) +
   geom_smooth(size = 2) + 
@@ -397,7 +397,7 @@ For example: ***NDVI_Landsat_2024.tif - NDVI_Landsat_2019.tif***
 
 Here is how I would do it for the NDVI Image. Feel free to use the writeRaster function to export your ndvi images and make a layout in ArcGIS or QGIS if you would be more comfortable there. The ggplot layout is acceptable though!
 
-```{r, echo=TRUE, eval=FALSE}
+```{r, echo=TRUE, eval=TRUE}
 ndvi_diff <- list_of_ndvis[[12]] - list_of_ndvis[[7]]
 
 #using tmap
